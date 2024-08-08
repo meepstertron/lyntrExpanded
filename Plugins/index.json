@@ -1,0 +1,12 @@
+{
+    "Version": 1,
+    "plugins": [
+      {
+        "name": "HighlightLinks",
+        "ver": 1,
+        "desc": "A simple plugin designed to highlight links and mentions making you able to click them",
+        "author": "meepstertron",
+        "file": "highlightlinks.js"
+      }
+    ]
+  }
