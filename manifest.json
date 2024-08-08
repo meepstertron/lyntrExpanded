@@ -1,0 +1,16 @@
+{
+    "manifest_version": 3,
+    "name": "LyntrExpanded",
+    "version": "1.0",
+    "description": "An extension that adds more features to the lyntr social media",
+    "permissions": [
+      "activeTab"
+    ],
+    "content_scripts": [
+      {
+        "matches": ["https://lyntr.com/*"],
+        "js": ["content.js"]
+      }
+    ]
+  }
+  
