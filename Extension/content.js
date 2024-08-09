@@ -48,7 +48,7 @@ function addCustomSidebarElement() {
 </div>
 <div class="tab-content" id="themes-content">
     <h3>Themes</h3>
-    <p>PThemes go here.</p>
+    <p>Themes go here.</p>
 </div>
 <div class="tab-content" id="plugins-content">
     <h3>Plugins</h3>
@@ -56,7 +56,16 @@ function addCustomSidebarElement() {
 </div>
 <div class="tab-content" id="about-content">
     <h3>About</h3>
-    <p>About content goes here.</p>
+    <div style="height: 10px;"></div>
+    <p>LyntrExpanded is a addon that is striving to improve Lyntr in ways facedev isnt its is also open source</p>
+    <p>you can visit the github <a href="https://github.com/meepstertron/lyntrExpanded">here</a> we currently have Themes and Plugins</p>
+    <p> </p><p> </p>
+    <div>
+        <img src="https://cdn.lyntr.com/lyntr/9132970051129344_medium.webp?v=0.8658219954878665" alt="Your profile picture." class="h-12 w-12 rounded-full   text-center">
+        <p>Hiya, im meep</p>
+        <p>I like to draw and code :3 i am the creator of LyntrExpanded</p>
+        <p>Contact me on discord: .meepstertron (please report bugs and suggest features on the github)</p>
+    </div>
 </div>
                     `;
                     // Insert the new div in the same position as the target div
@@ -71,7 +80,7 @@ function addCustomSidebarElement() {
                             margin-bottom: 1rem;
                         }
                         .tab-button {
-                            background: hsl(var(--muted-foreground));
+                            background: hsl(var(--border));
                             border: none;
                             padding: 0.5rem 1rem;
                             margin-right: 0.5rem;
@@ -79,7 +88,7 @@ function addCustomSidebarElement() {
                             transition: background 0.3s;
                         }
                         .tab-button.active {
-                            background: hsl(var(--primary));
+                            background: hsl(var(--muted-foreground));
                             color: white;
                         }
                         .tab-content {
@@ -87,6 +96,46 @@ function addCustomSidebarElement() {
                         }
                         .tab-content.active {
                             display: block;
+                        }
+                        .plugin-container {
+                            display: flex;
+                            flex-wrap: wrap;
+                            gap: 10px;
+                        }
+                        .plugin {
+                            border: 1px solid #ccc;
+                            padding: 10px;
+                            border-radius: 5px;
+                            flex: 1 1 calc(33.333% - 20px);
+                            box-sizing: border-box;
+                            background: hsl(var(--muted-background));
+                            transition: box-shadow 0.3s;
+                        }
+                        .plugin:hover {
+                            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                        }
+                        .plugin h4 {
+                            margin: 0 0 5px;
+                        }
+                        .plugin p {
+                            margin: 0;
+                        }
+                        .plugin button {
+                            margin-top: 10px;
+                            padding: 5px 10px;
+                            border: none;
+                            border-radius: 3px;
+                            cursor: pointer;
+                            transition: background 0.3s;
+                            color: hsl(var(--primary-foreground));
+                        }
+                        .plugin button.install {
+                            background: hsl(var(--primary));
+                            color: white;
+                        }
+                        .plugin button.uninstall {
+                            background: hsl(var(--muted-foreground));
+                            color: white;
                         }
                     `;
                     const styleSheet = document.createElement("style");
@@ -114,6 +163,11 @@ function addCustomSidebarElement() {
 
                             // Set the clicked button as active
                             button.classList.add('active');
+
+                            // Handle the "Plugins" tab click
+                            if (tabId === 'plugins') {
+                                fetchPlugins();
+                            }
                         });
                     });
                 } else {
@@ -150,6 +204,65 @@ function addCustomSidebarElement() {
     } else {
         console.log('Profile button container not found.');
     }
+}
+
+// Function to fetch plugins and display them
+function fetchPlugins() {
+    const pluginContainer = document.querySelector('.plugin-container');
+    const installedPlugins = JSON.parse(localStorage.getItem('installedPlugins')) || [];
+
+    fetch('https://raw.githubusercontent.com/meepstertron/lyntrExpanded/main/Plugins/index.json')
+        .then(response => response.json())
+        .then(data => {
+            if (pluginContainer) {
+                pluginContainer.innerHTML = ''; // Clear existing content
+
+                data.plugins.forEach(plugin => {
+                    const pluginDiv = document.createElement('div');
+                    pluginDiv.classList.add('plugin');
+                    pluginDiv.innerHTML = `
+                        <h4>${plugin.name}</h4>
+                        <p><strong>Version:</strong> ${plugin.ver}</p>
+                        <p>${plugin.desc}</p>
+                        <p><strong>Author:</strong> ${plugin.author}</p>
+                    `;
+
+                    // Add Install or Uninstall button based on installation status
+                    const isInstalled = installedPlugins.includes(plugin.file);
+                    const button = document.createElement('button');
+                    button.textContent = isInstalled ? 'Uninstall' : 'Install';
+                    button.classList.add(isInstalled ? 'uninstall' : 'install');
+                    pluginDiv.appendChild(button);
+
+                    // Add event listener to the button
+                    button.addEventListener('click', () => {
+                        if (isInstalled) {
+                            // Uninstall the plugin
+                            const index = installedPlugins.indexOf(plugin.file);
+                            if (index > -1) {
+                                installedPlugins.splice(index, 1);
+                                localStorage.setItem('installedPlugins', JSON.stringify(installedPlugins));
+                                button.textContent = 'Install';
+                                button.classList.remove('uninstall');
+                                button.classList.add('install');
+                                console.log(`Uninstalled ${plugin.name}`);
+                            }
+                        } else {
+                            // Install the plugin
+                            installedPlugins.push(plugin.file);
+                            localStorage.setItem('installedPlugins', JSON.stringify(installedPlugins));
+                            button.textContent = 'Uninstall';
+                            button.classList.remove('install');
+                            button.classList.add('uninstall');
+                            console.log(`Installed ${plugin.name}`);
+                        }
+                    });
+
+                    pluginContainer.appendChild(pluginDiv);
+                });
+            }
+        })
+        .catch(error => console.error('Error fetching plugins:', error));
 }
 
 // Use MutationObserver to handle dynamic content loading and changes
