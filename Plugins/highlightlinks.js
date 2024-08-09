@@ -68,3 +68,9 @@ function highlightMentions(excludeClass) {
     // Add listeners for mentions after highlighting
     addMentionListeners();
 }
+
+
+window.onBodyChange = function() {
+    highlightMentions('static bottom-2 flex max-w-md cursor-pointer items-center gap-4 rounded-full bg-border p-4 md:absolute md:w-[250px]');
+
+};

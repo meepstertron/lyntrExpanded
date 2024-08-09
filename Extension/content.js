@@ -60,7 +60,8 @@ function addCustomSidebarElement() {
     <p>LyntrExpanded is a addon that is striving to improve Lyntr in ways facedev isnt its is also open source</p>
     <p>you can visit the github <a href="https://github.com/meepstertron/lyntrExpanded">here</a> we currently have Themes and Plugins</p>
     <p> </p><p> </p>
-    <div>
+    <div style="height: 10px;"></div>
+    <div id="profile">
         <img src="https://cdn.lyntr.com/lyntr/9132970051129344_medium.webp?v=0.8658219954878665" alt="Your profile picture." class="h-12 w-12 rounded-full   text-center">
         <p>Hiya, im meep</p>
         <p>I like to draw and code :3 i am the creator of LyntrExpanded</p>
@@ -136,6 +137,15 @@ function addCustomSidebarElement() {
                         .plugin button.uninstall {
                             background: hsl(var(--muted-foreground));
                             color: white;
+                        }
+                        #profile {
+                            border: 1px solid;
+                            border-radius: 1rem;
+                            width: 60px
+                            height: 30px
+                            
+                            border-color: hsl(var(--muted-foreground));
+                            padding: 5px;
                         }
                     `;
                     const styleSheet = document.createElement("style");
