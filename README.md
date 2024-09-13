@@ -1,3 +1,6 @@
+# Lyntr is discontinued 
+Sadly Lyntr was discontinued so lyntr expanded came to a stop and will not be updated, I had a great time making this and hope to make something again
+
 # lyntrExpanded
 the lyntr app but like more features ig, feel free to contribute 
 
